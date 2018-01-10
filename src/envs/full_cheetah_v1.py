@@ -3,9 +3,9 @@ import numpy as np
 from gym import utils
 from gym.envs.mujoco import mujoco_env
 
-class HalfCheetahEnvV2(mujoco_env.MujocoEnv, utils.EzPickle):
+class FullCheetahEnvV1(mujoco_env.MujocoEnv, utils.EzPickle):
     def __init__(self):
-        model_path = os.path.join(os.path.dirname(__file__), 'assets', 'half_cheetah_v2.xml')
+        model_path = os.path.join(os.path.dirname(__file__), 'assets', 'full_cheetah_v1.xml')
         mujoco_env.MujocoEnv.__init__(self, model_path, 5)
         utils.EzPickle.__init__(self)
 
@@ -14,13 +14,14 @@ class HalfCheetahEnvV2(mujoco_env.MujocoEnv, utils.EzPickle):
         torsoanglebefore = self.model.data.qpos[2, 0]
         self.do_simulation(action, self.frame_skip)
         xposafter = self.model.data.qpos[0, 0]
-        torsoangleafter = self.model.data.qpos[2, 0]
+        torso_pitch_angle_after = self.model.data.qpos[2, 0]
+        torso_roll_angle_after = self.model.data.qpos[3, 0]
         ob = self._get_obs()
         reward_ctrl = - 0.1 * np.square(action).sum()
         reward_run = (xposafter - xposbefore)/self.dt
-        reward_flat = -np.square(torsoangleafter)
-        # print('ctrl: {0} run: {1} torso: {2}'.format(reward_ctrl, reward_run, reward_flat))
-        reward = reward_ctrl + reward_run + reward_flat
+        reward_torso_pitch = -np.square(torso_pitch_angle_after)
+        reward_torso_roll = -np.square(torso_roll_angle_after)
+        reward = reward_ctrl + reward_run + reward_torso_pitch + reward_torso_roll
         done = False
         return ob, reward, done, dict(reward_run=reward_run, reward_ctrl=reward_ctrl)
 
@@ -37,4 +38,4 @@ class HalfCheetahEnvV2(mujoco_env.MujocoEnv, utils.EzPickle):
         return self._get_obs()
 
     def viewer_setup(self):
-        self.viewer.cam.distance = 10
+        self.viewer.cam.distance = 5
