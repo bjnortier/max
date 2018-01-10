@@ -28,15 +28,17 @@ the MuJoCo control tasks.
 import gym
 import numpy as np
 from gym import wrappers
-from policy import Policy
-from value_function import NNValueFunction
 import scipy.signal
-from utils import Logger, Scaler
 from datetime import datetime
 import os
 import argparse
 import signal
+from time import sleep
+import matplotlib.pyplot as plt
 
+from pat_coady.policy import Policy
+from pat_coady.value_function import NNValueFunction
+from pat_coady.utils import Logger, Scaler
 
 class GracefulKiller:
     """ Gracefully exit program on CTRL-C """
@@ -54,14 +56,17 @@ def init_gym(env_name):
     Initialize gym environment, return dimension of observation
     and action spaces.
 
-    Args:
-        env_name: str environment name (e.g. "Humanoid-v1")
-
     Returns: 3-tuple
         gym environment (object)
         number of observation dimensions (int)
         number of action dimensions (int)
     """
+    gym.envs.register(
+        id='HalfCheetah-v2',
+        entry_point='envs.half_cheetah_v2:HalfCheetahEnvV2',
+        max_episode_steps=1000,
+        reward_threshold=4800.0,
+    )
     env = gym.make(env_name)
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
@@ -259,12 +264,10 @@ def log_batch_stats(observes, actions, advantages, disc_sum_rew, logger, episode
                 '_Episode': episode
                 })
 
-
 def main(env_name, num_episodes, gamma, lam, kl_targ, batch_size, hid1_mult, policy_logvar):
     """ Main training loop
 
     Args:
-        env_name: OpenAI Gym environment name, e.g. 'Hopper-v1'
         num_episodes: maximum number of episodes to run
         gamma: reward discount factor (float)
         lam: lambda from Generalized Advantage Estimate
@@ -277,9 +280,12 @@ def main(env_name, num_episodes, gamma, lam, kl_targ, batch_size, hid1_mult, pol
     env, obs_dim, act_dim = init_gym(env_name)
     obs_dim += 1  # add 1 to obs dimension for time step feature (see run_episode())
     now = datetime.utcnow().strftime("%b-%d_%H:%M:%S")  # create unique directories
-    logger = Logger(logname=env_name, now=now)
-    aigym_path = os.path.join('/tmp', env_name, now)
-    env = wrappers.Monitor(env, aigym_path, force=True)
+    log_directory = os.path.join('/tmp', env_name, now)
+    if not os.path.exists(log_directory):
+        print('Creating logging directory {0}'.format(log_directory))
+        os.makedirs(log_directory)
+    logger = Logger(env_name, log_directory)
+    env = wrappers.Monitor(env, log_directory, force=True)
     scaler = Scaler(obs_dim)
     val_func = NNValueFunction(obs_dim, hid1_mult)
     policy = Policy(obs_dim, act_dim, kl_targ, hid1_mult, policy_logvar)
@@ -298,11 +304,12 @@ def main(env_name, num_episodes, gamma, lam, kl_targ, batch_size, hid1_mult, pol
         log_batch_stats(observes, actions, advantages, disc_sum_rew, logger, episode)
         policy.update(observes, actions, advantages, logger)  # update policy
         val_func.fit(observes, disc_sum_rew, logger)  # update value function
-        logger.write(display=True)  # write logger results to file and stdout
+        logger.write(display=True, graph=True)  # write logger results to file and stdout
         if killer.kill_now:
             if input('Terminate training (y/[n])? ') == 'y':
                 break
             killer.kill_now = False
+    plt.show()
     logger.close()
     policy.close_sess()
     val_func.close_sess()

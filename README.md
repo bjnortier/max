@@ -14,11 +14,17 @@ I'm using OpenAI Gym as a starting point, together with Tensorflow. There is a v
 
 ![Half Cheetah](https://www.groundai.com/media/arxiv_projects/4068/figures/half_che.jpeg)
 
+I has 6 actuators, 3 for each leg (thigh, shin, foot), modelled as Mujoco motors. The control of these motors will be trained to make the Cheetah cover the maximum distance possible, with some changes (see CHANGELOG.md)
+
 Pat Coady submitted the [highest-ranking solution to this problem](https://gym.openai.com/envs/HalfCheetah-v1/), so I'm using his generously open sourced (MIT) code to begin with.
 
 You can read more about his efforts on his blog:
 
 [https://learningai.io/projects/2017/07/28/ai-gym-workout.html](https://learningai.io/projects/2017/07/28/ai-gym-workout.html)
+
+And find his code for TRPO here:
+
+[https://github.com/pat-coady/trpo](https://github.com/pat-coady/trpo)
 
 ## Do-it-yourself
 
@@ -37,10 +43,3 @@ $ python -m venv env
 $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
-
-
-## Versioning
-
-Each version is tagged using a git tag. You can reproduce each version yourself by checking out the tag and running
-
-- v0 - The Original OpenAI Gym model & Original learning algorithm by Pat Coady

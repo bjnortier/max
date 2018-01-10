@@ -2,13 +2,14 @@
 Logging and Data Scaling Utilities
 
 Written by Patrick Coady (pat-coady.github.io)
+Modified by Ben Nortier (github.com/bjnortier)
 """
 import numpy as np
 import os
 import shutil
 import glob
 import csv
-
+import matplotlib.pyplot as plt
 
 class Scaler(object):
     """ Generate scale and offset based on running mean and stddev along axis=0
@@ -61,25 +62,23 @@ class Scaler(object):
 
 class Logger(object):
     """ Simple training logger: saves to file and optionally prints to stdout """
-    def __init__(self, logname, now):
+    def __init__(self, env_name, log_directory):
         """
         Args:
-            logname: name for log (e.g. 'Hopper-v1')
-            now: unique sub-directory name (e.g. date/time string)
+            env_name: the environment name
+            log_directory: the log directory
         """
-        path = os.path.join('log-files', logname, now)
-        os.makedirs(path)
-        filenames = glob.glob('*.py')  # put copy of all python files in log_dir
-        for filename in filenames:     # for reference
-            shutil.copy(filename, path)
-        path = os.path.join(path, 'log.csv')
+        path = os.path.join(log_directory, 'log.csv')
 
+        self.env_name = env_name
         self.write_header = True
         self.log_entry = {}
         self.f = open(path, 'w')
         self.writer = None  # DictWriter created with first call to write() method
+        self.mean_rewards = []
+        self.episodes = []
 
-    def write(self, display=True):
+    def write(self, display=True, graph=False):
         """ Write 1 log entry to file, and optionally to stdout
         Log fields preceded by '_' will not be printed to stdout
 
@@ -88,6 +87,14 @@ class Logger(object):
         """
         if display:
             self.disp(self.log_entry)
+        if graph:
+            plt.cla()
+            plt.title(self.env_name)
+            plt.xlabel('Episodes')
+            plt.ylabel('Mean reward')
+            plt.plot(self.episodes, self.mean_rewards)
+            plt.draw()
+            plt.pause(0.001)
         if self.write_header:
             fieldnames = [x for x in self.log_entry.keys()]
             self.writer = csv.DictWriter(self.f, fieldnames=fieldnames)
@@ -114,6 +121,9 @@ class Logger(object):
         Args:
             items: dictionary of items to update
         """
+        if '_Episode' in items:
+            self.episodes.append(items['_Episode'])
+            self.mean_rewards.append(self.log_entry['_MeanReward'])
         self.log_entry.update(items)
 
     def close(self):
