@@ -33,6 +33,7 @@ I use pyenv and venv for virtual python environments. YMMV.
 ### Requirements
 
 - Python 3.5.x
+- Mujoco 1.3.0
 
 ### Create python virtual environment and install dependencies
 
@@ -43,3 +44,13 @@ $ python -m venv env
 $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
+
+### Run the experiments
+
+```
+$ python ./src/train.py HalfCheetah-v1 -n 30000 -b 20
+$ python ./src/train.py HalfCheetah-v2 -n 30000 -b 20
+$ python ./src/train.py FullCheetah-v1 -n 30000 -b 20
+```
+
+Please log an issue on Github if you're trying to replicate this but aren't successful.
