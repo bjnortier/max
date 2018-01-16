@@ -35,6 +35,7 @@
 <mujoco model="cheetah">
   <compiler angle="radian" coordinate="local" inertiafromgeom="true" settotalmass="14"/>
   <asset>
+    <mesh name="body" file="stl/body_v1.stl" scale="0.001 0.001 0.001"/>
     <mesh name="back_left_thigh" file="stl/back_thigh_v1.stl" scale="0.001 0.001 0.001"/>
     <mesh name="back_right_thigh" file="stl/back_thigh_v1.stl" scale="0.001 -0.001 0.001"/>
     <mesh name="back_left_shin" file="stl/back_shin_v1.stl" scale="0.001 0.001 0.001"/>
@@ -70,8 +71,7 @@
       <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 0" stiffness="0" type="slide"/>
       <joint armature="0" axis="0 1 0" damping="0" limited="false" name="rooty" pos="0 0 0" stiffness="0" type="hinge"/>
       <joint armature="0" axis="1 0 0" damping="0" limited="false" name="torsoroll" pos="0 0 0" stiffness="0" type="hinge"/>
-      <geom fromto="-.324 0 0 .5 0 0" name="torso" size="0.015" type="capsule"/>
-      <geom axisangle="0 1 0 .87" name="head" pos=".6 0 .1" size="0.075 .15" type="capsule"/>
+      <geom pos="-0.324 0 0" type="mesh" mesh="body" rgba="0.8 0.6 0.2 1"/>
       <!-- <body name="hip" pos="-.324 0 0">
         <geom name="hipmarker" pos="0 0 0" type="sphere" size="0.02" rgba="1.0 1.0 1.0 1"/>
       </body> -->
