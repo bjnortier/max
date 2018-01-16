@@ -35,9 +35,18 @@
 <mujoco model="cheetah">
   <compiler angle="radian" coordinate="local" inertiafromgeom="true" settotalmass="14"/>
   <asset>
-    <mesh file="stl/back_thigh_v1.stl" scale="0.001 0.001 0.001"/>
-    <mesh file="stl/back_shin_v1.stl" scale="0.001 0.001 0.001"/>
-    <mesh file="stl/back_foot_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="back_left_thigh" file="stl/back_thigh_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="back_right_thigh" file="stl/back_thigh_v1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="back_left_shin" file="stl/back_shin_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="back_right_shin" file="stl/back_shin_v1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="back_left_foot" file="stl/back_foot_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="back_right_foot" file="stl/back_foot_v1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="front_left_thigh" file="stl/front_thigh_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="front_right_thigh" file="stl/front_thigh_v1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="front_left_shin" file="stl/front_shin_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="front_right_shin" file="stl/front_shin_v1.stl" scale="0.001 -0.001 0.001"/>
+    <mesh name="front_left_foot" file="stl/front_foot_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="front_right_foot" file="stl/front_foot_v1.stl" scale="0.001 -0.001 0.001"/>
   </asset>
   <default>
     <joint armature=".1" damping=".01" limited="true" solimplimit="0 .8 .03" solreflimit=".02 1" stiffness="8"/>
@@ -72,48 +81,72 @@
       <body name="backfootjoint" pos="-0.546 0 -0.318">
         <geom name="backfootjointmarker" pos="0 0 0" type="sphere" size="0.02" rgba="1.0 1.0 1.0 1"/>
       </body> -->
-      <body name="rbthigh" pos="-.324 0 0">
-        <joint axis="0 1 0" damping="1" name="rbthigh" range="-.785 .785" stiffness="60" type="hinge"/>
-        <geom name="rbthigh" pos="0 0 0" axisangle="0 1 0 -0.1638864168" type="mesh" mesh="back_thigh_v1" rgba="0.2 0.8 0.2 1"/>
-        <body name="rbshin" pos="0.044 0 -.266">
-          <joint axis="0 1 0" damping="4.5" name="rbshin" pos="0 -0.3 0" range="-.785 .785" stiffness="40" type="hinge"/>
-          <geom name="rbshin" pos="0 0 0" axisangle="0 1 0 1.3777629115" type="mesh" mesh="back_shin_v1" rgba="0.2 0.2 0.9 1"/>
-          <body name="rbfoot" pos="-.266 0 -.052">
-            <joint axis="0 1 0" damping="0" name="rbfoot" pos="0 -0.3 0" range="-.4 .785" stiffness="20" type="hinge"/>
-            <geom name="rbfoot" pos="0 0 0" type="mesh" mesh="back_foot_v1" rgba="0.9 0.2 0.2 1" />
+      <body name="back_left_thigh" pos="-.324 -.11 0">
+        <joint axis="0 1 0" damping="1" name="back_left_hip" range="-1.5 1.5" stiffness="60" type="hinge"/>
+        <geom pos="0 0 0" axisangle="0 1 0 -0.1638864168" type="mesh" mesh="back_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 .025 0" axisangle="0 1 0 -0.1638864168" type="mesh" mesh="back_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="back_left_shin" pos="0.044 0 -.266">
+          <joint axis="0 1 0" damping="4.5" name="back_left_knee" pos="0 -0.3 0" range="-1.5 1.5" stiffness="40" type="hinge"/>
+          <geom pos="0 0.005 0" axisangle="0 1 0 1.3777629115" type="mesh" mesh="back_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 0.020 0" axisangle="0 1 0 1.3777629115" type="mesh" mesh="back_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="back_left_foot" pos="-.266 0 -.052">
+            <joint axis="0 1 0" damping="0" name="back_left_ankle" pos="0 -0.3 0" range="-1.5 1.5" stiffness="20" type="hinge"/>
+            <geom pos="0 0 0" axisangle="0 1 0 -0.2382374429" type="mesh" mesh="back_left_foot" rgba="0.9 0.2 0.2 1" />
+            <geom pos="0 0.025 0" axisangle="0 1 0 -0.2382374429" type="mesh" mesh="back_left_foot" rgba="0.9 0.2 0.2 1" />
           </body>
         </body>
       </body>
-      <body name="rfthigh" pos=".5 0 0">
-        <joint axis="0 1 0" damping="4.5" name="rfthigh" pos="0 -0.2 0" range="-1 .7" stiffness="180" type="hinge"/>
-        <geom axisangle="0 1 0 .52" name="rfthigh" pos="-.07 -0.2 -.12" size="0.046 .133" type="capsule"/>
-        <body name="rfshin" pos="-.14 0 -.24">
-          <joint axis="0 1 0" damping="3" name="rfshin" pos="0 -0.2 0" range="-1.2 .87" stiffness="120" type="hinge"/>
-          <geom axisangle="0 1 0 -.6" name="rfshin" pos=".065 -0.2 -.09" rgba="0.9 0.6 0.6 1" size="0.046 .106" type="capsule"/>
-          <body name="rffoot" pos=".13 0 -.18">
-            <joint axis="0 1 0" damping="1.5" name="rffoot" pos="0 -0.2 0" range="-.5 .5" stiffness="60" type="hinge"/>
-            <geom axisangle="0 1 0 -.6" name="rffoot" pos=".045 -0.2 -.07" rgba="0.9 0.6 0.6 1" size="0.046 .07" type="capsule"/>
+      <body name="back_right_thigh" pos="-.324 .11 0">
+        <joint axis="0 1 0" damping="1" name="back_right_hip" range="-1.5 1.5" stiffness="60" type="hinge"/>
+        <geom pos="0 0 0" axisangle="0 1 0 -0.1638864168" type="mesh" mesh="back_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 -.025 0" axisangle="0 1 0 -0.1638864168" type="mesh" mesh="back_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="back_right_shin" pos="0.044 0 -.266">
+          <joint axis="0 1 0" damping="4.5" name="back_right_knee" pos="0 -0.3 0" range="-1.5 1.5" stiffness="40" type="hinge"/>
+          <geom pos="0 -0.005 0" axisangle="0 1 0 1.3777629115" type="mesh" mesh="back_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 -0.020 0" axisangle="0 1 0 1.3777629115" type="mesh" mesh="back_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="back_right_foot" pos="-.266 0 -.052">
+            <joint axis="0 1 0" damping="0" name="back_right_ankle" pos="0 -0.3 0" range="-1.5 1.5" stiffness="20" type="hinge"/>
+            <geom pos="0 0 0" axisangle="0 1 0 -0.2382374429" type="mesh" mesh="back_right_foot" rgba="0.9 0.2 0.2 1" />
+            <geom pos="0 -0.025 0" axisangle="0 1 0 -0.2382374429" type="mesh" mesh="back_right_foot" rgba="0.9 0.2 0.2 1" />
           </body>
         </body>
       </body>
-      <body name="lfthigh" pos=".5 0 0">
-        <joint axis="0 1 0" damping="4.5" name="lfthigh" pos="0 0.2 0" range="-1 .7" stiffness="180" type="hinge"/>
-        <geom axisangle="0 1 0 .52" name="lfthigh" pos="-.07 0.2 -.12" size="0.046 .133" type="capsule"/>
-        <body name="lfshin" pos="-.14 0 -.24">
-          <joint axis="0 1 0" damping="3" name="lfshin" pos="0 0.2 0" range="-1.2 .87" stiffness="120" type="hinge"/>
-          <geom axisangle="0 1 0 -.6" name="lfshin" pos=".065 0.2 -.09" rgba="0.9 0.6 0.6 1" size="0.046 .106" type="capsule"/>
-          <body name="lffoot" pos=".13 0 -.18">
-            <joint axis="0 1 0" damping="1.5" name="lffoot" pos="0 0.2 0" range="-.5 .5" stiffness="60" type="hinge"/>
-            <geom axisangle="0 1 0 -.6" name="lffoot" pos=".045 0.2 -.07" rgba="0.9 0.6 0.6 1" size="0.046 .07" type="capsule"/>
+      <body name="front_left_thigh" pos="0 .07 -.113">
+        <joint axis="0 1 0" damping="1" name="front_left_hip" range="-1.5 1.5" stiffness="60" type="hinge"/>
+        <geom pos="0 0 0" axisangle="0 1 0 0.2398082392" type="mesh" mesh="front_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 .025 0" axisangle="0 1 0 0.23980823928" type="mesh" mesh="front_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="front_left_shin" pos="-0.045 0 -.184">
+          <joint axis="0 1 0" damping="4.5" name="front_left_knee" pos="0 -0.3 0" range="-1.5 1.5" stiffness="40" type="hinge"/>
+          <geom pos="0 0.005 0" axisangle="0 1 0 -1.4557791291" type="mesh" mesh="front_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 0.020 0" axisangle="0 1 0 -1.4557791291" type="mesh" mesh="front_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="front_left_foot" pos=".199 0 -.023">
+            <joint axis="0 1 0" damping="0" name="front_left_ankle" pos="0 -0.3 0" range="-1.5 1.5" stiffness="20" type="hinge"/>
+            <geom pos="0 0 0" axisangle="0 1 0 0.09965830029" type="mesh" mesh="front_left_foot" rgba="0.9 0.2 0.2 1" />
+            <geom pos="0 0.025 0" axisangle="0 1 0 0.09965830029" type="mesh" mesh="front_left_foot" rgba="0.9 0.2 0.2 1" />
+          </body>
+        </body>
+      </body>
+      <body name="front_right_thigh" pos="0 -.07 -.113">
+        <joint axis="0 1 0" damping="1" name="front_right_hip" range="-1.5 1.5" stiffness="60" type="hinge"/>
+        <geom pos="0 0 0" axisangle="0 1 0 0.2398082392" type="mesh" mesh="front_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 -.025 0" axisangle="0 1 0 0.23980823928" type="mesh" mesh="front_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="front_right_shin" pos="-0.045 0 -.184">
+          <joint axis="0 1 0" damping="4.5" name="front_right_knee" pos="0 -0.3 0" range="-1.5 1.5" stiffness="40" type="hinge"/>
+          <geom pos="0 -0.005 0" axisangle="0 1 0 -1.4557791291" type="mesh" mesh="front_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 -0.020 0" axisangle="0 1 0 -1.4557791291" type="mesh" mesh="front_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="front_right_foot" pos=".199 0 -.023">
+            <joint axis="0 1 0" damping="0" name="front_right_ankle" pos="0 -0.3 0" range="-1.5 1.5" stiffness="20" type="hinge"/>
+            <geom pos="0 0 0" axisangle="0 1 0 0.09965830029" type="mesh" mesh="front_right_foot" rgba="0.9 0.2 0.2 1" />
+            <geom pos="0 -0.025 0" axisangle="0 1 0 0.09965830029" type="mesh" mesh="front_right_foot" rgba="0.9 0.2 0.2 1" />
           </body>
         </body>
       </body>
     </body>
   </worldbody>
   <actuator>
-    <motor gear="120" joint="rbthigh" name="rbthigh"/>
-    <motor gear="90" joint="rbshin" name="rbshin"/>
-    <motor gear="60" joint="rbfoot" name="rbfoot"/>
+    <motor gear="120" joint="back_left_hip" name="back_left_hip"/>
+    <motor gear="90" joint="back_left_knee" name="back_left_knee"/>
+    <motor gear="60" joint="back_left_ankle" name="back_left_ankle"/>
     <!-- <motor gear="120" joint="lbthigh" name="lbthigh"/>
     <motor gear="90" joint="lbshin" name="lbshin"/>
     <motor gear="60" joint="lbfoot" name="lbfoot"/>
