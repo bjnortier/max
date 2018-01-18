@@ -8,6 +8,7 @@
         - torsoz            slider position (m)
         - torsopitch        hinge  angle (rad)
         - torsoroll         hinge  angle (rad)
+        - torsoyaw          hinge  angle (rad)
         - back_left_hip     hinge  angle (rad)
         - back_left_knee    hinge  angle (rad)
         - back_left_ankle   hinge  angle (rad)
@@ -24,6 +25,7 @@
         - torsoz            slider velocity (m/s)
         - torsopitch        hinge  position (m)
         - torsoroll         hinge  angle (rad)
+        - torsoyaw          hinge  angle (rad)
         - back_left_hip     hinge  angular velocity (rad/s)
         - back_left_knee    hinge  angular velocity (rad/s)
         - back_left_ankle   hinge  angular velocity (rad/s)
@@ -44,18 +46,18 @@
         - back_right_hip       hinge   torque (N m)
         - back_right_knee      hinge   torque (N m)
         - back_right_ankle     hinge   torque (N m)
-        - front_left_shoulder  hinge   torque (N m)
-        - front_left_elbow     hinge   torque (N m)
-        - front_left_wrist     hinge   torque (N m)
-        - front_right_shoulder hinge   torque (N m)
-        - front_right_elbow    hinge   torque (N m)
-        - front_right_wrist    hinge   torque (N m)
+        - front_left_hip       hinge   torque (N m)
+        - front_left_knee      hinge   torque (N m)
+        - front_left_ankle     hinge   torque (N m)
+        - front_right_hip      hinge   torque (N m)
+        - front_right_knee     hinge   torque (N m)
+        - front_right_ankle    hinge   torque (N m)
 
 -->
 <mujoco model="cheetah">
   <compiler angle="radian" coordinate="local" inertiafromgeom="true" settotalmass="14"/>
   <asset>
-    <mesh name="body" file="stl/body_v1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="torso" file="stl/torso_v2.stl" scale="0.001 0.001 0.001"/>
     <mesh name="back_left_thigh" file="stl/back_thigh_v1.stl" scale="0.001 0.001 0.001"/>
     <mesh name="back_right_thigh" file="stl/back_thigh_v1.stl" scale="0.001 -0.001 0.001"/>
     <mesh name="back_left_shin" file="stl/back_shin_v1.stl" scale="0.001 0.001 0.001"/>
@@ -70,7 +72,7 @@
     <mesh name="front_right_foot" file="stl/front_foot_v1.stl" scale="0.001 -0.001 0.001"/>
   </asset>
   <default>
-    <joint armature=".1" damping=".01" limited="true" solimplimit="0 .8 .03" solreflimit=".02 1" stiffness="8"/>
+    <joint axis="0 1 0" armature=".1" damping=".1" limited="true" solimplimit="0 .8 .03" solreflimit=".02 1" stiffness="0.5"/>
     <geom conaffinity="0" condim="3" contype="1" friction=".4 .1 .1" rgba="0.8 0.6 .4 1" solimp="0.0 0.8 0.01" solref="0.02 1"/>
     <motor ctrllimited="true" ctrlrange="-1 1"/>
   </default>
@@ -86,19 +88,88 @@
   <worldbody>
     <light cutoff="100" diffuse="1 1 1" dir="-0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3" specular=".1 .1 .1"/>
     <geom conaffinity="1" condim="3" material="MatPlane" name="floor" pos="0 0 0" rgba="0.8 0.9 0.8 1" size="40 40 40" type="plane"/>
+    <body name="torso" pos="0 0 0.682">
+      <joint armature="0" axis="1 0 0" damping="0" limited="false" name="torso:x" pos="0 0 0" stiffness="0" type="slide"/>
+      <joint armature="0" axis="0 1 0" damping="0" limited="false" name="torso:y" pos="0 0 0" stiffness="0" type="slide"/>
+      <joint armature="0" axis="0 0 1" damping="0" limited="false" name="torso:z" pos="0 0 0" stiffness="0" type="slide"/>
+      <joint armature="0" axis="0 1 0" damping="0" limited="false" name="torso:pitch" pos="0 0 0" stiffness="0" type="hinge"/>
+      <joint armature="0" axis="1 0 0" damping="0" limited="false" name="torso:roll" pos="0 0 0" stiffness="0" type="hinge"/>
+      <joint armature="0" axis="0 0 1" damping="0" limited="false" name="torso:yaw" pos="0 0 0" stiffness="0" type="hinge"/>
+      <geom pos="0 0 0" type="mesh" mesh="torso" rgba="0.8 0.6 0.2 1"/>
+      <body name="back_right_thigh" pos="-.324 -.11 .113">
+        <joint name="back_right_hip" range="-.78 1.57" type="hinge"/>
+        <geom pos="0 0 0" type="mesh" mesh="back_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 .025 0" type="mesh" mesh="back_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="back_right_shin" pos="0 0 -.26961">
+          <joint name="back_right_knee" range="0 3.14" type="hinge"/>
+          <geom pos="0 0.005 0" type="mesh" mesh="back_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 0.020 0" type="mesh" mesh="back_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="back_right_foot" pos="0 0 -.27104">
+            <joint name="back_right_ankle" range="-.785 .785" type="hinge"/>
+            <geom pos="0 0.005 0" type="mesh" mesh="back_right_foot" rgba="0.9 0.2 0.2 1"/>
+            <geom pos="0 0.020 0" type="mesh" mesh="back_right_foot" rgba="0.9 0.2 0.2 1"/>
+          </body>
+        </body>
+      </body>
+      <body name="back_left_thigh" pos="-.324 .11 .113">
+        <joint name="back_left_hip" range="-.78 1.57" type="hinge"/>
+        <geom pos="0 0 0" type="mesh" mesh="back_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 .025 0" type="mesh" mesh="back_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="back_left_shin" pos="0 0 -.26961">
+          <joint name="back_left_knee" range="0 3.14" type="hinge"/>
+          <geom pos="0 0.005 0" type="mesh" mesh="back_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 0.020 0" type="mesh" mesh="back_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="back_left_foot" pos="0 0 -.27104">
+            <joint name="back_left_ankle" range="-.785 .785" type="hinge"/>
+            <geom pos="0 0.005 0" type="mesh" mesh="back_left_foot" rgba="0.9 0.2 0.2 1"/>
+            <geom pos="0 0.020 0" type="mesh" mesh="back_left_foot" rgba="0.9 0.2 0.2 1"/>
+          </body>
+        </body>
+      </body>
+      <body name="front_right_thigh" pos="0 -.07 0">
+        <joint name="front_right_hip" range="-.78 1.57" type="hinge"/>
+        <geom pos="0 0 0" type="mesh" mesh="front_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 .025 0" type="mesh" mesh="front_right_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="front_right_shin" pos="0 0 -.18942">
+          <joint name="front_right_knee" range="-0.78 3.14" type="hinge"/>
+          <geom pos="0 0.005 0" type="mesh" mesh="front_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 0.020 0" type="mesh" mesh="front_right_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="front_right_foot" pos="0 0 -.20032">
+            <joint name="front_right_ankle" range="-.785 .785" type="hinge"/>
+            <geom pos="0 0.005 0" type="mesh" mesh="front_right_foot" rgba="0.9 0.2 0.2 1"/>
+            <geom pos="0 0.020 0" type="mesh" mesh="front_right_foot" rgba="0.9 0.2 0.2 1"/>
+          </body>
+        </body>
+      </body>
+      <body name="front_left_thigh" pos="0 .07 0">
+        <joint name="front_left_hip" range="-.78 1.57" type="hinge"/>
+        <geom pos="0 0 0" type="mesh" mesh="front_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <geom pos="0 .025 0" type="mesh" mesh="front_left_thigh" rgba="0.2 0.8 0.2 1"/>
+        <body name="front_left_shin" pos="0 0 -.18942">
+          <joint name="front_left_knee" range="-0.78 3.14" type="hinge"/>
+          <geom pos="0 0.005 0" type="mesh" mesh="front_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <geom pos="0 0.020 0" type="mesh" mesh="front_left_shin" rgba="0.2 0.2 0.9 1"/>
+          <body name="front_left_foot" pos="0 0 -.20032">
+            <joint name="front_left_ankle" range="-.785 .785" type="hinge"/>
+            <geom pos="0 0.005 0" type="mesh" mesh="front_left_foot" rgba="0.9 0.2 0.2 1"/>
+            <geom pos="0 0.020 0" type="mesh" mesh="front_left_foot" rgba="0.9 0.2 0.2 1"/>
+          </body>
+        </body>
+      </body>
+    </body>
   </worldbody>
   <actuator>
-    <!-- <motor gear="30" joint="back_left_hip" name="back_left_hip"/>
+    <motor gear="30" joint="back_left_hip" name="back_left_hip"/>
     <motor gear="20" joint="back_left_knee" name="back_left_knee"/>
     <motor gear="10" joint="back_left_ankle" name="back_left_ankle"/>
     <motor gear="30" joint="back_right_hip" name="back_right_hip"/>
     <motor gear="20" joint="back_right_knee" name="back_right_knee"/>
     <motor gear="10" joint="back_right_ankle" name="back_right_ankle"/>
-    <motor gear="20" joint="front_left_shoulder" name="front_left_shoulder"/>
-    <motor gear="12" joint="front_left_elbow" name="front_left_knee"/>
-    <motor gear="6" joint="front_left_wrist" name="front_left_ankle"/>
-    <motor gear="20" joint="front_right_shoulder" name="front_right_shoulder"/>
-    <motor gear="12" joint="front_right_elbow" name="front_right_knee"/>
-    <motor gear="6" joint="front_right_wrist" name="front_right_ankle"/> -->
+    <motor gear="20" joint="front_left_hip" name="front_left_hip"/>
+    <motor gear="12" joint="front_left_knee" name="front_left_knee"/>
+    <motor gear="6" joint="front_left_ankle" name="front_left_ankle"/>
+    <motor gear="20" joint="front_right_hip" name="front_right_hip"/>
+    <motor gear="12" joint="front_right_knee" name="front_right_knee"/>
+    <motor gear="6" joint="front_right_ankle" name="front_right_ankle"/>
   </actuator>
 </mujoco>
