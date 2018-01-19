@@ -165,11 +165,11 @@
     <motor gear="30" joint="back_right_hip" name="back_right_hip"/>
     <motor gear="20" joint="back_right_knee" name="back_right_knee"/>
     <motor gear="10" joint="back_right_ankle" name="back_right_ankle"/>
-    <motor gear="20" joint="front_left_hip" name="front_left_hip"/>
-    <motor gear="12" joint="front_left_knee" name="front_left_knee"/>
-    <motor gear="6" joint="front_left_ankle" name="front_left_ankle"/>
-    <motor gear="20" joint="front_right_hip" name="front_right_hip"/>
-    <motor gear="12" joint="front_right_knee" name="front_right_knee"/>
-    <motor gear="6" joint="front_right_ankle" name="front_right_ankle"/>
+    <motor gear="15" joint="front_left_hip" name="front_left_hip"/>
+    <motor gear="10" joint="front_left_knee" name="front_left_knee"/>
+    <motor gear="5" joint="front_left_ankle" name="front_left_ankle"/>
+    <motor gear="15" joint="front_right_hip" name="front_right_hip"/>
+    <motor gear="10" joint="front_right_knee" name="front_right_knee"/>
+    <motor gear="5" joint="front_right_ankle" name="front_right_ankle"/>
   </actuator>
 </mujoco>

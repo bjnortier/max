@@ -327,7 +327,7 @@ def main(env_name, num_episodes, gamma, lam, kl_targ, batch_size, hid1_mult, pol
             if input('Terminate training (y/[n])? ') == 'y':
                 break
             killer.kill_now = False
-    plt.show()
+    # plt.show()
     logger.close()
     policy.close_sess()
     val_func.close_sess()
