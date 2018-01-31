@@ -85,6 +85,18 @@ def init_gym(env_name):
         max_episode_steps=1000,
         reward_threshold=4800.0,
     )
+    gym.envs.register(
+        id='Metalhead-v3',
+        entry_point='envs.metalhead_v3:MetalheadEnvV3',
+        max_episode_steps=1000,
+        reward_threshold=4800.0,
+    )
+    gym.envs.register(
+        id='Metalhead-v4',
+        entry_point='envs.metalhead_v4:MetalheadEnvV4',
+        max_episode_steps=1000,
+        reward_threshold=4800.0,
+    )
     env = gym.make(env_name)
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
@@ -298,7 +310,7 @@ def main(env_name, num_episodes, gamma, lam, kl_targ, batch_size, hid1_mult, pol
     env, obs_dim, act_dim = init_gym(env_name)
     obs_dim += 1  # add 1 to obs dimension for time step feature (see run_episode())
     now = datetime.utcnow().strftime("%b-%d_%H:%M:%S")  # create unique directories
-    log_directory = os.path.join('/tmp', env_name, now)
+    log_directory = os.path.join('.results', env_name, now)
     if not os.path.exists(log_directory):
         print('Creating logging directory {0}'.format(log_directory))
         os.makedirs(log_directory)

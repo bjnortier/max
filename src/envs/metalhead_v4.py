@@ -3,9 +3,9 @@ import numpy as np
 from gym import utils
 from gym.envs.mujoco import mujoco_env
 
-class MetalheadEnvV1(mujoco_env.MujocoEnv, utils.EzPickle):
+class MetalheadEnvV4(mujoco_env.MujocoEnv, utils.EzPickle):
     def __init__(self):
-        model_path = os.path.join(os.path.dirname(__file__), 'assets', 'metalhead_v1.xml')
+        model_path = os.path.join(os.path.dirname(__file__), 'assets', 'metalhead_v4.xml')
         mujoco_env.MujocoEnv.__init__(self, model_path, 5)
         utils.EzPickle.__init__(self)
 
