@@ -1,6 +1,5 @@
-log-files/
-__pycache__
-env/
+train_env/
 .DS_Store
 MUJOCO_LOG.TXT
 .results
+*.pyc

@@ -1,0 +1,8 @@
+cffi==1.11.4
+Cython==0.27.3
+glfw==1.5.0
+imageio==2.2.0
+mujoco-py==1.50.1.34
+numpy==1.14.0
+Pillow==5.0.0
+pycparser==2.18
