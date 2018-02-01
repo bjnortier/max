@@ -97,6 +97,18 @@ def init_gym(env_name):
         max_episode_steps=1000,
         reward_threshold=4800.0,
     )
+    gym.envs.register(
+        id='Metalhead-v5',
+        entry_point='envs.metalhead_v5:MetalheadEnvV5',
+        max_episode_steps=1000,
+        reward_threshold=4800.0,
+    )
+    gym.envs.register(
+        id='Metalhead-v6',
+        entry_point='envs.metalhead_v6:MetalheadEnvV6',
+        max_episode_steps=1000,
+        reward_threshold=4800.0,
+    )
     env = gym.make(env_name)
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
