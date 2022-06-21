@@ -8,7 +8,7 @@ glfw==1.4.0
 idna==2.6
 imageio==2.2.0
 mujoco-py==0.5.7
-numpy==1.14.0
+numpy==1.22.0
 pep8==1.7.1
 Pillow==5.0.0
 pycparser==2.18
